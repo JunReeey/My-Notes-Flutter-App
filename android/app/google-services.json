@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1027540896209",
+    "project_id": "mynotes-sulense",
+    "storage_bucket": "mynotes-sulense.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027540896209:android:932c1cf985a94f8c12f8f0",
+        "android_client_info": {
+          "package_name": "com.sulense.mynotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027540896209-8upt0bhar8ifi3c6h0a961af0u8dm9s0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo4WIfPaz5T7ub3JB6XzhED-6QiNPokY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027540896209-8upt0bhar8ifi3c6h0a961af0u8dm9s0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
