@@ -4,7 +4,7 @@ import 'package:mynotes/service/auth/firebase_auth_provider.dart';
 
 class AuthService implements AuthProvider {
   final AuthProvider provider;
-  AuthService(this.provider);
+  AuthService(this.provider); //dependency injection
 
   factory AuthService.firebase() => AuthService(
         FirebaseAuthProvider(),
