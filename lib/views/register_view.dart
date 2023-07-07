@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as devtools show log;
-
 import 'package:mynotes/contants/routes.dart';
+import 'package:mynotes/service/auth/auth_exceptions.dart';
+import 'package:mynotes/service/auth/auth_service.dart';
 
 import '../utilities/show_error_dialog.dart';
 
@@ -59,40 +58,31 @@ class _RegisterViewState extends State<RegisterView> {
               final email = _email.text;
               final password = _password.text;
               try {
-                await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                await AuthService.firebase().createUser(
                   email: email,
                   password: password,
                 );
-                final user = FirebaseAuth.instance.currentUser;
-                await user?.sendEmailVerification();
+                AuthService.firebase().sendEmailVerification();
                 Navigator.of(context).pushNamed(verifyEmailRoute);
-              } on FirebaseAuthException catch (e) {
-                devtools.log(e.code);
-                if (e.code == 'weak-password') {
-                  showErrorDialog(
-                    context,
-                    'Password should be at least 6 characters',
-                  );
-                } else if (e.code == 'email-already-in-use') {
-                  showErrorDialog(
-                    context,
-                    'The email address is already in use',
-                  );
-                } else if (e.code == 'invalid-email') {
-                  showErrorDialog(
-                    context,
-                    'invalid email',
-                  );
-                } else {
-                  showErrorDialog(
-                    context,
-                    'Error: ${e.code}',
-                  );
-                }
-              } catch (e) {
+              } on WeakPasswordAuthException {
                 showErrorDialog(
                   context,
-                  e.toString(),
+                  'Password should be at least 6 characters',
+                );
+              } on EmailAlreadyInUseAuthException {
+                showErrorDialog(
+                  context,
+                  'Email already in use',
+                );
+              } on InvalidEmailAuthException {
+                showErrorDialog(
+                  context,
+                  'invalid email',
+                );
+              } on GenericAuthException {
+                showErrorDialog(
+                  context,
+                  'Failed to register',
                 );
               }
             },
