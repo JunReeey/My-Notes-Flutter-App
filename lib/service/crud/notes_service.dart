@@ -132,27 +132,27 @@ class NotesService {
     final dbUser = await getUser(email: owner.email);
     if (dbUser != owner) {
       throw CouldNotFindUser();
+    } else {
+      const text = '';
+      // create the note
+      final noteId = await db.insert(noteTable, {
+        userIdColumn: owner.id,
+        textColumn: text,
+        isSyncedWithCloudColumn: 1,
+      });
+
+      final note = DatabaseNote(
+        id: noteId,
+        userId: owner.id,
+        text: text,
+        isSyncedWithCloud: true,
+      );
+
+      _notes.add(note);
+      _notesStreamController.add(_notes);
+
+      return note;
     }
-
-    const text = '';
-    // create the note
-    final noteId = await db.insert(noteTable, {
-      userIdColumn: owner.id,
-      textColumn: text,
-      isSyncedWithCloudColumn: 1,
-    });
-
-    final note = DatabaseNote(
-      id: noteId,
-      userId: owner.id,
-      text: text,
-      isSyncedWithCloud: true,
-    );
-
-    _notes.add(note);
-    _notesStreamController.add(_notes);
-
-    return note;
   }
 
   Future<DatabaseUser> getUser({required String email}) async {
@@ -247,8 +247,9 @@ class NotesService {
       _db = db;
       // create the user table
       await db.execute(createUserTable);
-      // create note table
+
       await db.execute(createNoteTable);
+      // create note table
       await _cacheNotes();
     } on MissingPlatformDirectoryException {
       throw UnableToGetDocumentsDirectory();
@@ -270,7 +271,7 @@ class DatabaseUser {
         email = map[emailColumn] as String;
 
   @override
-  String toString() => 'Person, ID = $id, email = $email';
+  String toString() => 'Person, id = $id, email = $email';
 
   @override
   bool operator ==(covariant DatabaseUser other) => id == other.id;
@@ -301,7 +302,7 @@ class DatabaseNote {
 
   @override
   String toString() =>
-      'Note, ID = $id, userId = $userId, isSyncedWithCloud = $isSyncedWithCloud, text = $text';
+      'Note, ID = $id, userID = $userId, isSyncedWithCloud = $isSyncedWithCloud, text = $text';
 
   @override
   bool operator ==(covariant DatabaseNote other) => id == other.id;
